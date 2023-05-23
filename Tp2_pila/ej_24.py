@@ -19,9 +19,9 @@ class Pila:
 pila_personajes = Pila()
 pila_personajes.apilar(Personaje('Iron Man', 10))
 pila_personajes.apilar(Personaje('Black Widow', 7))
-pila_personajes.apilar(Personaje('Rocket Raccoon', 7))
-pila_personajes.apilar(Personaje('Spiderman', 7))
 pila_personajes.apilar(Personaje('Groot', 6))
+pila_personajes.apilar(Personaje('Spiderman', 7))
+pila_personajes.apilar(Personaje('Rocket Raccoon', 7))
 pila_personajes.apilar(Personaje('Falcon', 6))
 
 posicion = 1
