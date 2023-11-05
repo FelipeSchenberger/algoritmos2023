@@ -1,165 +1,163 @@
-class Creature:
-    def __init__(self, name, defeated_by=None, description=None, captured_by=None):
-        self.name = name
-        self.defeated_by = defeated_by
-        self.description = description
-        self.captured_by = captured_by
+# 23. Implementar un algoritmo que permita generar un árbol con los datos de la siguiente tabla y
+# resuelva las siguientes consultas:
+# a. listado inorden de las criaturas y quienes la derrotaron;#?Listo
+# b. se debe permitir cargar una breve descripción sobre cada criatura;#?Listo
+# c. mostrar toda la información de la criatura Talos;#?Listo
+# d. determinar los 3 héroes o dioses que derrotaron mayor cantidad de criaturas;#!Falta
+# e. listar las criaturas derrotadas por Heracles;#?Listo
+# f. listar las criaturas que no han sido derrotadas;#?Listo
+# g. además cada nodo debe tener un campo “capturada” que almacenará el nombre del héroe
+# o dios que la capturo;#?Listo
+# h. modifique los nodos de las criaturas Cerbero, Toro de Creta, Cierva Cerinea y Jabalí de
+# Erimanto indicando que Heracles las atrapó;#!Falta
+# i. se debe permitir búsquedas por coincidencia;#!?Listo
+# j. eliminar al Basilisco y a las Sirenas;#?Listo
+# k. modificar el nodo que contiene a las Aves del Estínfalo, agregando que Heracles
+# derroto a varias;#!Falta
+# l. modifique el nombre de la criatura Ladón por Dragón Ladón;#!Falta
+# m. realizar un listado por nivel del árbol;#?Listo
+# n. muestre las criaturas capturadas por Heracles.#?Listo
 
-
-class TreeNode:
-    def __init__(self, creature):
-        self.creature = creature
-        self.left = None
-        self.right = None
-
-
-class Tree:
-    def __init__(self):
-        self.root = None
-
-    def insert(self, creature):
-        self.root = self._insert(self.root, creature)
-
-    def _insert(self, node, creature):
-        if node is None:
-            return TreeNode(creature)
-
-        if creature.name < node.creature.name:
-            node.left = self._insert(node.left, creature)
-        elif creature.name > node.creature.name:
-            node.right = self._insert(node.right, creature)
-
-        return node
-
-    def in_order_traversal(self, node):
-        if node:
-            self.in_order_traversal(node.left)
-            print(f"Criatura: {node.creature.name}")
-            if node.creature.defeated_by:
-                print(f"Derrotada por: {node.creature.defeated_by}")
-            if node.creature.description:
-                print(f"Descripción: {node.creature.description}")
-            print()
-            self.in_order_traversal(node.right)
-
-    def level_order_traversal(self):
-        if not self.root:
-            return
-        queue = [self.root]
-        while queue:
-            node = queue.pop(0)
-            print(f"Criatura: {node.creature.name}")
-            if node.creature.defeated_by:
-                print(f"Derrotada por: {node.creature.defeated_by}")
-            if node.creature.description:
-                print(f"Descripción: {node.creature.description}")
-            if node.creature.captured_by:
-                print(f"Capturada por: {node.creature.captured_by}")
-            print()
-            if node.left:
-                queue.append(node.left)
-            if node.right:
-                queue.append(node.right)
-
-    def search(self, name):
-        return self._search(self.root, name)
-
-    def _search(self, node, name):
-        if node is None:
-            return None
-        if node.creature.name == name:
-            return node.creature
-        if name < node.creature.name:
-            return self._search(node.left, name)
-        else:
-            return self._search(node.right, name)
-
-    def update_defeated_by(self, name, defeated_by):
-        creature = self.search(name)
-        if creature:
-            creature.defeated_by = defeated_by
-
-    def update_captured_by(self, name, captured_by):
-        creature = self.search(name)
-        if creature:
-            creature.captured_by = captured_by
-
-    def remove_creatures(self, node, names_to_remove):
-        if node is not None:
-            if node.creature.name not in names_to_remove:
-                node.left = self.remove_creatures(node.left, names_to_remove)
-                node.right = self.remove_creatures(node.right, names_to_remove)
-                return node
-            return None
-
-    def update_creature_name(self, old_name, new_name):
-        creature = self.search(old_name)
-        if creature:
-            creature.name = new_name
-
-
-creature_tree = Tree()
-
-creatures = [
-    Creature("Ceto", defeated_by="Teseo"),
-    Creature("Tifón", defeated_by="Zeus"),
-    Creature("Equidna", defeated_by=["Argos Panoptes", "Teseo"]),
-    Creature("Dino", defeated_by="Atalanta"),
-    Creature("Pefredo"),
-    Creature("Enio", defeated_by="Heracles"),
-    Creature("Escila", defeated_by="Cloto"),
-    Creature("Caribdis", defeated_by="Láquesis"),
-    Creature("Euríale", defeated_by="Átropos"),
-    Creature("Esteno", defeated_by=["Minotauro de Creta", "Teseo"]),
-    Creature("Medusa", defeated_by="Perseo"),
-    Creature("Ladón"),
-    Creature("Águila del Cáucaso"),
-    Creature("Quimera", defeated_by="Belerofonte"),
-    Creature("Hidra de Lerna", defeated_by="Heracles"),
-    Creature("León de Nemea", defeated_by="Heracles"),
-    Creature("Esfinge", defeated_by="Edipo"),
-    Creature("Dragón de la Cólquida"),
-    Creature("Cerbero"),
-    Creature("Talos", defeated_by="Medea"),
-    Creature("Sirenas"),
-    Creature("Pitón", defeated_by="Apolo"),
-    Creature("Cierva de Cerinea"),
-    Creature("Basilisco"),
-    Creature("Toro de Creta"),
+lista_criaturas = [
+    {'Criatura': 'Ceto', 'Derrotado': None},
+    {'Criatura': 'Tifón', 'Derrotado': 'Zeus'},
+    {'Criatura': 'Equidna', 'Derrotado': 'Argos Panoptes'},
+    {'Criatura': 'Dino', 'Derrotado': None},
+    {'Criatura': 'Pefredo', 'Derrotado': None},
+    {'Criatura': 'Enio', 'Derrotado': None},
+    {'Criatura': 'Escila', 'Derrotado': None},
+    {'Criatura': 'Caribdis', 'Derrotado': None},
+    {'Criatura': 'Euríale', 'Derrotado': None},
+    {'Criatura': 'Esteno', 'Derrotado': None},
+    {'Criatura': 'Medusa', 'Derrotado': 'Perseo'},
+    {'Criatura': 'Ladón', 'Derrotado': 'Heracles'},
+    {'Criatura': 'Águila del Cáucaso', 'Derrotado': None},
+    {'Criatura': 'Quimera', 'Derrotado': 'Belerofonte'},
+    {'Criatura': 'Hidra de Lerna', 'Derrotado': 'Heracles'},
+    {'Criatura': 'León de Nemea', 'Derrotado': 'Heracles'},
+    {'Criatura': 'Esfinge', 'Derrotado': 'Edipo'},
+    {'Criatura': 'Dragón de la Cólquida', 'Derrotado': None},
+    {'Criatura': 'Cerbero', 'Derrotado': None},
+    {'Criatura': 'Cerda de Cromión', 'Derrotado': 'Teseo'},
+    {'Criatura': 'Ortro', 'Derrotado': 'Heracles'},
+    {'Criatura': 'Toro de Creta', 'Derrotado': 'Teseo'},
+    {'Criatura': 'Jabalí de Calidón', 'Derrotado': 'Atalanta'},
+    {'Criatura': 'Carcinos', 'Derrotado': None},
+    {'Criatura': 'Gerión', 'Derrotado': 'Heracles'},
+    {'Criatura': 'Láquesis', 'Derrotado': None},
+    {'Criatura': 'Átropos', 'Derrotado': None},
+    {'Criatura': 'Minotauro de Creta', 'Derrotado': 'Teseo'},
+    {'Criatura': 'Harpías', 'Derrotado': None},
+    {'Criatura': 'Argos Panoptes', 'Derrotado': 'Hermes'},
+    {'Criatura': 'Aves del Estínfalo', 'Derrotado': None},
+    {'Criatura': 'Talos', 'Derrotado': 'Medea'},
+    {'Criatura': 'Sirenas', 'Derrotado': None},
+    {'Criatura': 'Pitón', 'Derrotado': 'Apolo'},
+    {'Criatura': 'Cierva de Cerinea', 'Derrotado': None},
+    {'Criatura': 'Basilisco', 'Derrotado': None},
+    {'Criatura': 'Jabali de Erimanto', 'Derrotado': None},
+    {'Criatura': 'Cloto', 'Derrotado': None},
 ]
 
-for creature in creatures:
-    creature_tree.insert(creature)
+
+from arbol_binario_actualizado import BinaryTree, get_value_from_file
 
 
-creature_tree.update_defeated_by("Ceto", "Teseo")
-creature_tree.update_defeated_by("Pefredo", "Carcinos")
-creature_tree.update_defeated_by("Águila del Cáucaso", "Aves del Estínfalo")
-creature_tree.update_defeated_by("Cerbero", "Heracles")
-creature_tree.update_defeated_by("Toro de Creta", "Teseo")
+criaturas_tree = BinaryTree()
+for criatura in lista_criaturas:
+    criaturas_tree.insert_node(criatura['Criatura'], {'Derrotado': criatura['Derrotado']})
 
-creature_tree.update_captured_by("Cerbero", "Heracles")
-creature_tree.update_captured_by("Toro de Creta", "Heracles")
-creature_tree.update_captured_by("Cierva de Cerinea", "Heracles")
-creature_tree.update_captured_by("Jabalí de Erimanto", "Heracles")
+#A
+criaturas_tree.inorden_otherValues()
+print()
 
-creature_tree.update_creature_name("Ladón", "Dragón Ladón")
+#B
+criaturas_tree.inorden_add_field('Descripcion', '-')
+criaturas_tree.inorden_otherValues()
 
+#C
+bus = criaturas_tree.search('Talos')
+if bus is not None:
+    print ('La información de Talos es: ', bus.value, bus.other_values)
+else:
+    print ('Talos no se encuentra en el arbol.')
+print()
 
-creatures_to_remove = ["Basilisco", "Sirenas"]
-creature_tree.root = creature_tree.remove_creatures(creature_tree.root, creatures_to_remove)
+#D
+dic_ranking = {}
+criaturas_tree.inorden_ranking(dic_ranking)
 
+def order_por(item):
+    return item[1]
 
-aves_del_estinfalo = creature_tree.search("Aves del Estínfalo")
-if aves_del_estinfalo:
-    aves_del_estinfalo.description = "Aves del Estínfalo derrotadas por Heracles."
+ordenados = list(dic_ranking.items())
+ordenados.sort(key=order_por, reverse=True)
+print('El TOP 3  de los que han derrotado a más criaturas es: ')
+print(ordenados[:3])
+print()
 
+#E
+print('Las criaturas derrotas por Heracles son: ')
+criaturas_tree.inorden_defeats('Heracles')
+print()
 
-print("Listado por nivel del árbol:")
-creature_tree.level_order_traversal()
+#F
+print('Las criaturas que aún no han sido derrotadas son: ')
+criaturas_tree.inorden_defeats(None)
+print()
 
+#G
+criaturas_tree.inorden_add_field('Capturada', None)
+criaturas_tree.inorden_otherValues()
+print()
 
-print("\nCriaturas capturadas por Heracles:")
-for creature in creatures:
-    if creature.captured_by == "Heracles":
-        print(creature.name)
+#H
+H = ['Cerbero', 'Toro de Creta', 'Cierva de Cerinea', 'Jabali de Erimanto']
+criaturas_tree.inorden_modify_fields(H, 'Capturada', 'Heracles')
+criaturas_tree.inorden_otherValues()
+print()
+
+#J
+A = 'Basilisco'
+B = 'Sirenas'
+pos = criaturas_tree.search(A)
+if pos:
+    criaturas_tree.delete_node(A)
+    print(f'{A} se ha eliminado correctamente.')
+else:
+    print(f'{A} no se encuentra en el arbol.')
+print()
+
+pos = criaturas_tree.search(B)
+if pos:
+    criaturas_tree.delete_node(B)
+    print(f'{B} se ha eliminado correctamente.')
+else:
+    print(f'{B} no se encuentra en el arbol.')
+print()
+
+#K
+K = ['Aves del Estínfalo']
+criaturas_tree.inorden_modify_fields(K, 'Derrotado', 'Heracles')
+criaturas_tree.inorden_otherValues()
+print()
+
+#L
+C = 'Ladón'
+pos = criaturas_tree.search(C)
+if pos is not None:
+    buscado_values = pos.other_values
+    criaturas_tree.delete_node(C)
+    criaturas_tree.insert_node('Dragón Ladón', buscado_values)
+criaturas_tree.inorden_otherValues()
+print()
+
+#M
+print('Listado por nivel: ')
+criaturas_tree.by_level_otherValues()
+print()
+
+#N
+print('Heracles capturo a:')
+criaturas_tree.inorden_capture('Heracles')
+print()
