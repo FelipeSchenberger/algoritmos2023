@@ -1,3 +1,5 @@
+from arbol_binario import BinaryTree
+
 # 23. Implementar un algoritmo que permita generar un árbol con los datos de la siguiente tabla y
 # resuelva las siguientes consultas:
 # a. listado inorden de las criaturas y quienes la derrotaron;#?Listo
@@ -60,22 +62,22 @@ lista_criaturas = [
 ]
 
 
-from arbol_binario_actualizado import BinaryTree, get_value_from_file
+
 
 
 criaturas_tree = BinaryTree()
 for criatura in lista_criaturas:
     criaturas_tree.insert_node(criatura['Criatura'], {'Derrotado': criatura['Derrotado']})
 
-#A
+#a
 criaturas_tree.inorden_otherValues()
 print()
 
-#B
+#b
 criaturas_tree.inorden_add_field('Descripcion', '-')
 criaturas_tree.inorden_otherValues()
 
-#C
+#c
 bus = criaturas_tree.search('Talos')
 if bus is not None:
     print ('La información de Talos es: ', bus.value, bus.other_values)
@@ -83,7 +85,7 @@ else:
     print ('Talos no se encuentra en el arbol.')
 print()
 
-#D
+#d
 dic_ranking = {}
 criaturas_tree.inorden_ranking(dic_ranking)
 
@@ -96,28 +98,28 @@ print('El TOP 3  de los que han derrotado a más criaturas es: ')
 print(ordenados[:3])
 print()
 
-#E
+#e
 print('Las criaturas derrotas por Heracles son: ')
 criaturas_tree.inorden_defeats('Heracles')
 print()
 
-#F
+#f
 print('Las criaturas que aún no han sido derrotadas son: ')
 criaturas_tree.inorden_defeats(None)
 print()
 
-#G
+#g
 criaturas_tree.inorden_add_field('Capturada', None)
 criaturas_tree.inorden_otherValues()
 print()
 
-#H
+#h
 H = ['Cerbero', 'Toro de Creta', 'Cierva de Cerinea', 'Jabali de Erimanto']
 criaturas_tree.inorden_modify_fields(H, 'Capturada', 'Heracles')
 criaturas_tree.inorden_otherValues()
 print()
 
-#J
+#j
 A = 'Basilisco'
 B = 'Sirenas'
 pos = criaturas_tree.search(A)
@@ -136,13 +138,13 @@ else:
     print(f'{B} no se encuentra en el arbol.')
 print()
 
-#K
+#k
 K = ['Aves del Estínfalo']
 criaturas_tree.inorden_modify_fields(K, 'Derrotado', 'Heracles')
 criaturas_tree.inorden_otherValues()
 print()
 
-#L
+#l
 C = 'Ladón'
 pos = criaturas_tree.search(C)
 if pos is not None:
@@ -152,12 +154,12 @@ if pos is not None:
 criaturas_tree.inorden_otherValues()
 print()
 
-#M
+#m
 print('Listado por nivel: ')
 criaturas_tree.by_level_otherValues()
 print()
 
-#N
+#n
 print('Heracles capturo a:')
 criaturas_tree.inorden_capture('Heracles')
 print()
